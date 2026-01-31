@@ -1,5 +1,5 @@
 import { Client, PublishToApiResponse } from "@upstash/qstash";
-import { MAILER_URL, QSTASH_TOKEN } from "./const";
+import { MAILER_URL, QSTASH_TOKEN } from "../config/env";
 
 export interface SendMailOptions {
   to: string;
@@ -9,7 +9,6 @@ export interface SendMailOptions {
 }
 
 const qstash = new Client({
-  baseUrl: QSTASH_URL,
   token: QSTASH_TOKEN,
 });
 
