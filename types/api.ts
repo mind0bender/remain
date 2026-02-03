@@ -5,10 +5,7 @@ export interface SuccessResType<T> {
 
 export interface ErrorResType {
   success: false;
-  error: {
-    code: string;
-    message: string;
-  };
+  errors: string[];
 }
 
 type ResType<T> = SuccessResType<T> | ErrorResType;

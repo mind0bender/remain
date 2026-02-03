@@ -1,4 +1,4 @@
-import { MONGO_URI } from "@/app/config/env";
+import { MONGO_URI } from "config/env";
 import mongoose, { connect, Mongoose } from "mongoose";
 
 interface MongoCache {

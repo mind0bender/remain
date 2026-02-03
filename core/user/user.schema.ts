@@ -1,5 +1,6 @@
 import { Schema } from "mongoose";
-import { IUser, UserMethods, UserModel, UserStatus } from "./user.types";
+import { IUser, UserMethods, UserStatus } from "core/user/user.types";
+import { UserModel } from "core/user/user.model";
 
 const userSchema = new Schema<IUser, UserModel, UserMethods>(
   {
@@ -24,16 +25,9 @@ const userSchema = new Schema<IUser, UserModel, UserMethods>(
       trim: true,
     },
     password: {
-      hash: {
-        type: String,
-        required: true,
-        select: false,
-      },
-      salt: {
-        type: String,
-        required: true,
-        select: false,
-      },
+      type: String,
+      required: true,
+      select: false,
     },
     lifecycle: {
       status: {

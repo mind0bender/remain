@@ -1,5 +1,6 @@
+"use server";
+import { MAILER_URL, QSTASH_TOKEN } from "@/config/env";
 import { Client, PublishToApiResponse } from "@upstash/qstash";
-import { MAILER_URL, QSTASH_TOKEN } from "../config/env";
 
 export interface SendMailOptions {
   to: string;
@@ -40,5 +41,7 @@ export default async function sendMail({
       appName,
     },
   })) as PublishToApiResponse;
-  return { messageId };
+  return {
+    messageId,
+  };
 }

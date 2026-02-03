@@ -1,3 +1,5 @@
+import { Document } from "mongoose";
+
 export enum UserStatus {
   ACTIVE = "ACTIVE",
   INACTIVE = "INACTIVE",
@@ -7,10 +9,7 @@ export enum UserStatus {
 export interface IUser {
   name: string;
   email: string;
-  password: {
-    hash: string;
-    salt: string;
-  };
+  password: string;
   username: string;
   lifecycle: {
     status: UserStatus;
@@ -19,4 +18,7 @@ export interface IUser {
   };
 }
 
-export interface UserMethods {}
+export interface UserMethods {
+  verifyPassword(password: string): Promise<boolean>;
+  setPassword(password: string): Promise<void>;
+}
