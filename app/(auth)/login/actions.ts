@@ -4,7 +4,8 @@ import { loginSchema } from "@/core/auth/auth.schemas";
 import { login } from "@/core/auth/auth.service";
 import { createSession } from "@/lib/auth/session";
 import ResType from "@/types/api";
-import { $ZodIssue } from "zod/v4/core";
+import { zodIssuesToStrings } from "@/utils/zodHelper";
+import { redirect } from "next/navigation";
 
 export interface LoginResType {
   id: string | null;
@@ -20,7 +21,7 @@ export default async function loginAction(
   if (!success) {
     return {
       success: false,
-      errors: error.issues.flatMap((issue: $ZodIssue): string => issue.message),
+      errors: zodIssuesToStrings(error.issues),
     };
   }
 
@@ -29,12 +30,6 @@ export default async function loginAction(
   try {
     const { id } = await login({ username, password });
     await createSession({ _id: id });
-    return {
-      success: true,
-      data: {
-        id,
-      },
-    };
   } catch (e: unknown) {
     if (e instanceof Error) {
       return {
@@ -47,4 +42,5 @@ export default async function loginAction(
       errors: ["Unknown server error"],
     };
   }
+  redirect("/");
 }

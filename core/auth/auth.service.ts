@@ -26,19 +26,15 @@ export async function login({
       throw new Error("Error encountered while finding user");
     }
     if (!user) throw new Error("Invalid credentials");
-    try {
-      const verified: boolean = await user.verifyPassword(password);
-      if (!verified) throw new Error("Invalid credentials");
+    const verified: boolean = await user.verifyPassword(password);
+    if (!verified) throw new Error("Invalid credentials");
 
-      return {
-        id: user._id.toString(),
-        name: user.name,
-        email: user.email,
-        username: user.username,
-      };
-    } catch {
-      throw new Error("Error encountered while verifying password");
-    }
+    return {
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      username: user.username,
+    };
   } catch (e: unknown) {
     throw e;
   }
@@ -58,18 +54,17 @@ export async function register({
     } catch {
       throw new Error("Cannot connect to Database");
     }
-    let exists: boolean;
+    let existsByUsername: boolean;
+    let existsByEmail: boolean;
+
     try {
-      exists = !!(
-        (await User.findByUsername(username)) || (await User.findByEmail(email))
-      );
+      existsByUsername = !!(await User.findByUsername(username));
+      existsByEmail = !!(await User.findByEmail(email));
     } catch {
       throw new Error("Error encountered while finding user");
     }
-    if (exists) {
-      console.log("throwing");
-      throw new Error("User already exists");
-    }
+    if (existsByUsername) throw new Error("username not available");
+    if (existsByEmail) throw new Error("email already in registerod");
 
     const user: HydratedDocument<IUser, UserMethods> = new User({
       name,

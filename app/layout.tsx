@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
+import "sonner/dist/styles.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,10 +16,12 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Remain | Digital Legacy & Secrets Vault",
-  description: "Secure your digital legacy with Remain. Store encrypted secrets and messages that are automatically shared with loved ones if you stop logging in.",
+  description:
+    "Secure your digital legacy with Remain. Store encrypted secrets and messages that are automatically shared with loved ones if you stop logging in.",
   openGraph: {
     title: "Remain | Digital Legacy & Secrets Vault",
-    description: "A secure fail-safe for your digital assets. Ensure your data reaches the right people when you can not.",
+    description:
+      "A secure fail-safe for your digital assets. Ensure your data reaches the right people when you can not.",
     url: "https://remain.vercel.app",
     siteName: "Remain",
     type: "website",
@@ -32,9 +36,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-stone-100 dark:bg-black text-stone-950 dark:text-stone-50`}
       >
         {children}
+        <Toaster
+          className="toaster group"
+          toastOptions={{
+            classNames: {
+              toast:
+                "group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg",
+            },
+          }}
+          style={
+            {
+              "--normal-border": "var(--border)",
+            } as React.CSSProperties
+          }
+        />
       </body>
     </html>
   );

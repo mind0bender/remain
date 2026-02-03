@@ -22,8 +22,14 @@ export default async function connectDB(): Promise<Mongoose> {
       bufferCommands: false,
     });
   }
-  cached.connection = await cached.promise;
-  globalForMongoose.mongoose = cached;
-  console.log("connected to DB");
-  return cached.connection;
+  try {
+    cached.connection = await cached.promise;
+    globalForMongoose.mongoose = cached;
+    console.log("connected to DB");
+    return cached.connection;
+  } catch (e: unknown) {
+    console.error("cannot connet to db");
+    console.error(e);
+    throw e;
+  }
 }
