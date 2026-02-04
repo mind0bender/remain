@@ -96,7 +96,7 @@ export default function LoginPage() {
               </InputGroupAddon>
             </InputGroup>
           </Field>
-          <Button variant={"secondary"}>Login</Button>
+          <Button variant={"default"}>Login</Button>
         </FieldGroup>
         <div className={`w-full flex justify-end gap-1 text-sm`}>
           Don&apos;t have an account?

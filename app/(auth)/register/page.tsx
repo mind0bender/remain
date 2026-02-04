@@ -121,7 +121,7 @@ export default function RegisterPage() {
               </InputGroupAddon>
             </InputGroup>
           </Field>
-          <Button type="submit" variant={"secondary"}>
+          <Button type="submit" variant={"link"}>
             Register
           </Button>
         </FieldGroup>
