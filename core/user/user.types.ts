@@ -1,5 +1,3 @@
-import { Document } from "mongoose";
-
 export enum UserStatus {
   ACTIVE = "ACTIVE",
   INACTIVE = "INACTIVE",
@@ -11,6 +9,7 @@ export interface IUser {
   email: string;
   password: string;
   username: string;
+  verified: boolean;
   lifecycle: {
     status: UserStatus;
     lastActiveAt: Date;

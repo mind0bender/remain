@@ -3,9 +3,14 @@ import {
   LoginOptions,
   LoginReturnT,
   RegisterReturnT,
+  SendVerificationLinkOptions,
 } from "@/core/auth/auth.types";
-import { HydratedDocument } from "mongoose";
 import connectDB from "@/lib/db/mongoose";
+import sendMail from "@/utils/mail";
+import { BASE_URI } from "@/config/env";
+import { HydratedDocument } from "mongoose";
+import { VerifyUserOptions, VerifyUserReturnT } from "@/core/auth/auth.types";
+import { SessionPayload, verify } from "@/lib/auth/jwt";
 
 export async function login({
   username,
@@ -89,5 +94,58 @@ export async function register({
     };
   } catch (e: unknown) {
     throw e;
+  }
+}
+
+export async function sendVerificationLink({
+  email,
+  token,
+}: SendVerificationLinkOptions): Promise<void> {
+  const emailTemplate: string = `<a href="${BASE_URI}/verify/${token}">
+  Verify my account
+</a>`;
+  try {
+    await sendMail({
+      to: email,
+      subject: "Remain - Account Verification",
+      html: emailTemplate,
+      appName: "Remain",
+    });
+  } catch (e: unknown) {
+    console.error(e);
+  }
+}
+
+export async function verifyUser({
+  token,
+  confirm,
+}: VerifyUserOptions): Promise<VerifyUserReturnT> {
+  let user: HydratedDocument<IUser, UserMethods> | null = null;
+
+  try {
+    const { _id }: SessionPayload = verify(token);
+    user = await User.findById(_id);
+  } catch {
+    throw new Error("Invalid token");
+  }
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  try {
+    if (confirm) {
+      user.verified = true;
+      await user.save();
+    }
+    const { _id: id, name, username, email, verified } = user;
+    return {
+      id: id.toString(),
+      name,
+      username,
+      email,
+      verified,
+    };
+  } catch {
+    throw new Error("Error Saving user");
   }
 }

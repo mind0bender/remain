@@ -29,6 +29,11 @@ const userSchema = new Schema<IUser, UserModel, UserMethods>(
       required: true,
       select: false,
     },
+    verified: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
     lifecycle: {
       status: {
         type: String,

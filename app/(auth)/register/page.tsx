@@ -18,7 +18,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { ArrowUpRight, EyeIcon, EyeOff } from "lucide-react";
+import { ArrowUpRight, EyeIcon, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 const initialState: ResType<RegisterResData> = {
@@ -27,7 +27,7 @@ const initialState: ResType<RegisterResData> = {
 };
 
 export default function RegisterPage() {
-  const [registerData, registerActionClient] = useActionState<
+  const [registerData, registerActionClient, isPending] = useActionState<
     ResType<RegisterResData>,
     FormData
   >(registerAction, initialState);
@@ -117,12 +117,12 @@ export default function RegisterPage() {
                   setShowPassword((pSP: boolean): boolean => !pSP)
                 }
               >
-                {showPassword ? <EyeOff /> : <EyeIcon />}{" "}
+                {!showPassword ? <EyeOff /> : <EyeIcon />}{" "}
               </InputGroupAddon>
             </InputGroup>
           </Field>
-          <Button type="submit" variant={"link"}>
-            Register
+          <Button type="submit" variant={"default"}>
+            {isPending ? <Loader2 className="animate-spin" /> : <>Register</>}
           </Button>
         </FieldGroup>
         <div className={`w-full flex justify-end gap-1 text-sm`}>

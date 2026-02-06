@@ -16,9 +16,13 @@ ok(
   process.env.JWT_SECRET,
   `JWT_SECRET is required, received ${process.env.JWT_SECRET}`,
 );
-
+ok(
+  process.env.BASE_URI,
+  `BASE_URI is required, received ${process.env.BASE_URI}`,
+);
 export const QSTASH_TOKEN: string = process.env.QSTASH_TOKEN;
 export const MAILER_URL: string = process.env.MAILER_URL;
 export const MONGO_URI: string = process.env.MONGO_URI;
 export const JWT_SECRET: string = process.env.JWT_SECRET;
 export const IS_DEV: boolean = process.env.NODE_ENV !== "production";
+export const BASE_URI: string = process.env.BASE_URI;

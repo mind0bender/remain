@@ -9,7 +9,6 @@ import {
 } from "react";
 import ResType from "@/types/api";
 import loginAction, { LoginResType } from "./actions";
-import { LoginOptions } from "@/core/auth/auth.types";
 import { toast } from "sonner";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -92,7 +91,7 @@ export default function LoginPage() {
                   setShowPassword((pSP: boolean): boolean => !pSP)
                 }
               >
-                {showPassword ? <EyeOff /> : <EyeIcon />}{" "}
+                {!showPassword ? <EyeOff /> : <EyeIcon />}{" "}
               </InputGroupAddon>
             </InputGroup>
           </Field>
