@@ -128,6 +128,11 @@ export async function verifyUser({
 
     throw new Error("Invalid token");
   }
+  try {
+    await connectDB();
+  } catch {
+    throw new Error("Cannot connect to Database");
+  }
 
   const user: HydratedDocument<IUser, UserMethods> | null =
     await User.findById(_id);
