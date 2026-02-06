@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useActionState, useEffect } from "react";
+import { startTransition, useActionState, useCallback, useEffect } from "react";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,8 @@ import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import { sessionSchema } from "@/core/auth/auth.schemas";
+import { zodIssuesToStrings } from "@/utils/zodHelper";
 
 const initialState: ResType<VerifyUserReturnT> = {
   success: true,
@@ -49,15 +51,31 @@ export default function VerifyAccountPage() {
     });
   }, [errors]);
 
+  const handleSubmit = useCallback(
+    (formData: FormData): void => {
+      const dataObj = Object.fromEntries(formData.entries());
+      const { success, error } = sessionSchema.safeParse(dataObj);
+      if (!success) {
+        const errs: string[] = zodIssuesToStrings(error.issues);
+        errs.forEach((err: string): void => {
+          toast.error(err);
+        });
+      }
+      verifyUserActionClient(formData);
+    },
+    [verifyUserActionClient],
+  );
+
   if (!verifyUserState.success) {
     return <main>error</main>;
   }
 
   const { data } = verifyUserState;
+
   return (
     <main className="w-full min-h-screen flex flex-col justify-center items-center bg-stone-200 dark:bg-black">
       <form
-        action={verifyUserActionClient}
+        action={handleSubmit}
         className={`flex flex-col w-3/4 max-w-sm gap-8 bg-stone-200 dark:bg-black text-stone-950 dark:text-stone-50 border border-stone-400 dark:border-stone-800 px-10 py-8 rounded-md`}
       >
         <FieldGroup className="w-full">

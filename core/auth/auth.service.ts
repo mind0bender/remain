@@ -120,14 +120,18 @@ export async function verifyUser({
   token,
   confirm,
 }: VerifyUserOptions): Promise<VerifyUserReturnT> {
-  let user: HydratedDocument<IUser, UserMethods> | null = null;
-
+  let _id: string;
   try {
-    const { _id }: SessionPayload = verify(token);
-    user = await User.findById(_id);
-  } catch {
+    _id = verify(token)._id;
+  } catch (e: unknown) {
+    console.error(e);
+
     throw new Error("Invalid token");
   }
+
+  const user: HydratedDocument<IUser, UserMethods> | null =
+    await User.findById(_id);
+
   if (!user) {
     throw new Error("User not found");
   }
