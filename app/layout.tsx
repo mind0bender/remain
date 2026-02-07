@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import "sonner/dist/styles.css";
 import { ThemeProvider } from "next-themes";
 import { JSX } from "react";
+import Navbar from "@/components/navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-stone-100 dark:bg-black text-stone-950 dark:text-stone-50`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <ThemeProvider
           attribute="class"
@@ -46,7 +47,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <Navbar />
+          <main className="w-full grow flex flex-col justify-center items-center bg-stone-100 dark:bg-black text-stone-950 dark:text-stone-50">
+            {children}
+          </main>
           <Toaster
             className="toaster group"
             toastOptions={{

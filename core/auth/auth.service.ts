@@ -10,7 +10,7 @@ import sendMail from "@/utils/mail";
 import { BASE_URI } from "@/config/env";
 import { HydratedDocument } from "mongoose";
 import { VerifyUserOptions, VerifyUserReturnT } from "@/core/auth/auth.types";
-import { SessionPayload, verify } from "@/lib/auth/jwt";
+import { verify } from "@/lib/auth/jwt";
 
 export async function login({
   username,
@@ -113,6 +113,7 @@ export async function sendVerificationLink({
     });
   } catch (e: unknown) {
     console.error(e);
+    throw new Error("Unable to send email");
   }
 }
 

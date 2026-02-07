@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { IUser, UserStatus } from "./user.types";
+import { UserStatus } from "./user.types";
 
 export const userNameSchema = z
   .string()
@@ -13,13 +13,12 @@ export const userNameSchema = z
 export const usernameSchema = z
   .string()
   .trim()
-  .toLowerCase()
   .min(3, { message: "Username must be at least 3 characters" })
   .max(32, { message: "Username must be at most 32 characters" })
-  .regex(/^[a-z0-9_]+$/, {
-    message:
-      "Username may only contain lowercase letters, numbers, and underscores",
-  });
+  .regex(/^[A-Za-z0-9_]+$/, {
+    message: "Username may only contain letters, numbers, and underscores",
+  })
+  .transform((v) => v.toLowerCase());
 
 export const userEmailSchema = z
   .string()
