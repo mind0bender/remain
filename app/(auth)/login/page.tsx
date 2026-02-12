@@ -19,7 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowUpRight, EyeIcon, EyeOff } from "lucide-react";
+import { ArrowUpRight, EyeIcon, EyeOff, Loader2 } from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -125,7 +125,10 @@ export default function LoginPage() {
             </FieldError>
           </Field>
         </FieldGroup>
-        <Button variant={"default"}>Login</Button>
+
+        <Button type="submit" variant={"default"}>
+          {isPending ? <Loader2 className="animate-spin" /> : <>Login</>}
+        </Button>
         <div className={`w-full flex justify-end gap-1 text-sm`}>
           Don&apos;t have an account?
           <Link

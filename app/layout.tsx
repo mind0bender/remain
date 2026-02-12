@@ -6,6 +6,9 @@ import "sonner/dist/styles.css";
 import { ThemeProvider } from "next-themes";
 import { JSX } from "react";
 import Navbar from "@/components/navbar";
+import { IUser } from "@/core/user";
+import { UserProvider } from "@/providers/user-provider";
+import { getSession } from "@/lib/auth/session";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,11 +34,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>): JSX.Element {
+}>): Promise<JSX.Element> {
+  const user: IUser | null = await getSession();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -47,24 +52,26 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          <main className="w-full grow flex flex-col justify-center items-center bg-stone-100 dark:bg-black text-stone-950 dark:text-stone-50">
-            {children}
-          </main>
-          <Toaster
-            className="toaster group"
-            toastOptions={{
-              classNames: {
-                toast:
-                  "group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg",
-              },
-            }}
-            style={
-              {
-                "--normal-border": "var(--border)",
-              } as React.CSSProperties
-            }
-          />
+          <UserProvider user={user}>
+            <Navbar />
+            <main className="w-full grow flex flex-col justify-center items-center bg-stone-100 dark:bg-black text-stone-950 dark:text-stone-50">
+              {children}
+            </main>
+            <Toaster
+              className="toaster group"
+              toastOptions={{
+                classNames: {
+                  toast:
+                    "group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg",
+                },
+              }}
+              style={
+                {
+                  "--normal-border": "var(--border)",
+                } as React.CSSProperties
+              }
+            />
+          </UserProvider>
         </ThemeProvider>
       </body>
     </html>

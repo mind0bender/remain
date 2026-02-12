@@ -1,6 +1,12 @@
 "use client";
 
-import { startTransition, useActionState, useCallback, useEffect } from "react";
+import {
+  JSX,
+  startTransition,
+  useActionState,
+  useCallback,
+  useEffect,
+} from "react";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -13,6 +19,7 @@ import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { sessionSchema } from "@/core/auth/auth.schemas";
 import { zodIssuesToStrings } from "@/utils/zodHelper";
+import { NextPage } from "next";
 
 const initialState: ResType<VerifyUserReturnT> = {
   success: true,
@@ -25,7 +32,7 @@ const initialState: ResType<VerifyUserReturnT> = {
   },
 };
 
-export default function VerifyAccountPage() {
+const ConfirmVerifyAccountPage: NextPage = (): JSX.Element => {
   const { token } = useParams<{ token: string }>();
 
   const [verifyUserState, verifyUserActionClient, isPending] = useActionState<
@@ -140,4 +147,6 @@ export default function VerifyAccountPage() {
       </form>
     </main>
   );
-}
+};
+
+export default ConfirmVerifyAccountPage;
