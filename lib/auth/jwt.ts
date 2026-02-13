@@ -1,13 +1,17 @@
 import { JWT_SECRET } from "config/env";
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 
 export interface SessionPayload {
   _id: string;
 }
 
-export function sign(payload: SessionPayload): string {
+export function sign(
+  payload: SessionPayload,
+  { expiresIn = "7d", ...signOpts }: SignOptions = {},
+): string {
   return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: "7d",
+    expiresIn,
+    ...signOpts,
   });
 }
 

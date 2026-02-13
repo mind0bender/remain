@@ -8,7 +8,7 @@ import { JSX } from "react";
 import Navbar from "@/components/navbar";
 import { IUser } from "@/core/user";
 import { UserProvider } from "@/providers/user-provider";
-import { getSession } from "@/lib/auth/session";
+import { AuthSession, getSession } from "@/lib/auth/session";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,7 +39,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>): Promise<JSX.Element> {
-  const user: IUser | null = await getSession();
+  const user: AuthSession | null = await getSession();
 
   return (
     <html lang="en" suppressHydrationWarning>

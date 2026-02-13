@@ -18,3 +18,5 @@ export interface SendVerificationLinkOptions {
   email: string;
   token: string;
 }
+
+export interface SendVerificationLinkActionResT {}

@@ -2,7 +2,7 @@
 
 import ResType from "@/types/api";
 import { createSession } from "@/lib/auth/session";
-import { register, sendVerificationLink } from "@/core/auth/auth.service";
+import { register } from "@/core/auth/auth.service";
 import { zodIssuesToStrings } from "@/utils/zodHelper";
 import { registerSchema } from "@/core/auth/auth.schemas";
 import { RegisterReturnT } from "@/core/auth/auth.types";
@@ -27,7 +27,6 @@ export default async function registerAction(
   }
 
   const { username, email, password, name } = data;
-  let token: string;
   try {
     const { id }: RegisterReturnT = await register({
       username,
@@ -36,7 +35,7 @@ export default async function registerAction(
       name,
       verified: false,
     });
-    token = await createSession({ _id: id });
+    await createSession({ _id: id });
   } catch (e: unknown) {
     if (e instanceof Error) {
       return {
@@ -50,17 +49,5 @@ export default async function registerAction(
     };
   }
 
-  try {
-    await sendVerificationLink({
-      email,
-      token,
-    });
-  } catch {
-    return {
-      success: false,
-      errors: ["Failed to send verification link"],
-    };
-  }
-
-  redirect("/");
+  redirect("/verify");
 }

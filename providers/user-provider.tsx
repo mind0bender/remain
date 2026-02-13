@@ -1,5 +1,5 @@
 "use client";
-import { IUser } from "@/core/user";
+import { AuthSession } from "@/lib/auth/session";
 import {
   Context,
   createContext,
@@ -9,10 +9,12 @@ import {
   useContext,
 } from "react";
 
-const UserCtx: Context<IUser | null> = createContext<IUser | null>(null);
+const UserCtx: Context<AuthSession | null> = createContext<AuthSession | null>(
+  null,
+);
 
 export interface UserProviderProps extends PropsWithChildren {
-  user: IUser | null;
+  user: AuthSession | null;
 }
 
 export const UserProvider: FC<UserProviderProps> = ({
@@ -22,4 +24,4 @@ export const UserProvider: FC<UserProviderProps> = ({
   return <UserCtx.Provider value={user}>{children}</UserCtx.Provider>;
 };
 
-export const useUser = (): IUser | null => useContext(UserCtx);
+export const useUser = (): AuthSession | null => useContext(UserCtx);

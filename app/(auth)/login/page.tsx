@@ -15,6 +15,7 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -38,7 +39,7 @@ const initialState: ResType<LoginResType> = {
 };
 
 export default function LoginPage() {
-  const [loginData, loginActinoClient, isPending] = useActionState<
+  const [loginData, loginActionClient, isPending] = useActionState<
     ResType<LoginResType>,
     FormData
   >(loginAction, initialState);
@@ -67,15 +68,15 @@ export default function LoginPage() {
         formData.append(name, value);
       });
       startTransition((): void => {
-        loginActinoClient(formData);
+        loginActionClient(formData);
       });
     },
-    [loginActinoClient],
+    [loginActionClient],
   );
 
   return (
     <form className={`w-3/4 max-w-sm`} onSubmit={handleSubmit(onSubmit)}>
-      <fieldset
+      <FieldSet
         className={`flex flex-col gap-8 bg-stone-200 dark:bg-black text-stone-950 dark:text-stone-50 border border-stone-400 dark:border-stone-800 px-10 py-8 rounded-md`}
         disabled={isPending}
       >
@@ -138,7 +139,7 @@ export default function LoginPage() {
             Register <ArrowUpRight size={16} />
           </Link>
         </div>
-      </fieldset>
+      </FieldSet>
     </form>
   );
 }

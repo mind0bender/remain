@@ -3,10 +3,14 @@ import { SessionPayload, sign, verify } from "@/lib/auth/jwt";
 import { cookies } from "next/headers";
 import connectDB from "../db/mongoose";
 import User, { IUser } from "@/core/user";
+import { Types } from "mongoose";
+import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
 export async function createSession(payload: SessionPayload): Promise<string> {
-  const token = sign(payload);
-  const cookieStore = await cookies();
+  const token = sign(payload, {
+    expiresIn: "4h",
+  });
+  const cookieStore: ReadonlyRequestCookies = await cookies();
   cookieStore.set("token", token, {
     httpOnly: true,
     secure: !IS_DEV,
@@ -17,7 +21,16 @@ export async function createSession(payload: SessionPayload): Promise<string> {
   return token;
 }
 
-export async function getSession(): Promise<Omit<IUser, "password"> | null> {
+export async function destroySession(): Promise<void> {
+  const cookieStore: ReadonlyRequestCookies = await cookies();
+  cookieStore.delete("token");
+}
+
+export interface AuthSession extends Omit<IUser, "password"> {
+  id: string;
+}
+
+export async function getSession(): Promise<AuthSession | null> {
   const cookieStore = await cookies();
   const token: string | undefined = cookieStore.get("token")?.value;
   if (!token) return null;
@@ -34,11 +47,13 @@ export async function getSession(): Promise<Omit<IUser, "password"> | null> {
     throw new Error("Cannot connect to Database");
   }
 
-  const user: IUser | null = await User.findById(_id).lean();
+  const user: (IUser & { _id: Types.ObjectId } & { __v: number }) | null =
+    await User.findById(_id).lean();
 
   if (!user) return null;
 
   return {
+    id: user._id.toString(),
     name: user.name,
     email: user.email,
     username: user.username,

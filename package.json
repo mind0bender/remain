@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@react-email/components": "^1.0.7",
     "@upstash/qstash": "^2.9.0",
     "argon2": "^0.44.0",
     "class-variance-authority": "^0.7.1",

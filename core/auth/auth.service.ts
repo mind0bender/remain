@@ -11,6 +11,8 @@ import { BASE_URI } from "@/config/env";
 import { HydratedDocument } from "mongoose";
 import { VerifyUserOptions, VerifyUserReturnT } from "@/core/auth/auth.types";
 import { verify } from "@/lib/auth/jwt";
+import { destroySession } from "@/lib/auth/session";
+import { renderVerificationEmail } from "@/components/email/verification-mail";
 
 export async function login({
   username,
@@ -43,6 +45,10 @@ export async function login({
   } catch (e: unknown) {
     throw e;
   }
+}
+
+export async function logout(): Promise<void> {
+  await destroySession();
 }
 
 export type RegisterOptions = Omit<IUser, "lifecycle">;
@@ -101,9 +107,10 @@ export async function sendVerificationLink({
   email,
   token,
 }: SendVerificationLinkOptions): Promise<void> {
-  const emailTemplate: string = `<a href="${BASE_URI}/verify/${token}">
-  Verify my account
-</a>`;
+  const verificationLink: string = `${BASE_URI}/verify/${token}`;
+  const emailTemplate: string = await renderVerificationEmail({
+    verificationLink,
+  });
   try {
     await sendMail({
       to: email,
