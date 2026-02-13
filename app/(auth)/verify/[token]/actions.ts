@@ -2,9 +2,7 @@
 import { sessionSchema } from "@/core/auth/auth.schemas";
 import { verifyUser } from "@/core/auth/auth.service";
 import { VerifyUserOptions, VerifyUserReturnT } from "@/core/auth/auth.types";
-import { createSession } from "@/lib/auth/session";
 import type ResType from "@/types/api";
-import { Types } from "mongoose";
 import { redirect } from "next/navigation";
 
 export default async function verifyUserAction(
@@ -24,14 +22,17 @@ export default async function verifyUserAction(
 
   const { token, confirm }: VerifyUserOptions = data;
 
-  let id: string;
   try {
-    id = (
+    const { id, name, username, email, verified }: VerifyUserReturnT =
       await verifyUser({
         token,
         confirm,
-      })
-    ).id;
+      });
+    if (!confirm)
+      return {
+        success: true,
+        data: { id, name, username, email, verified },
+      };
   } catch (e: unknown) {
     if (e instanceof Error) {
       return {
@@ -44,8 +45,5 @@ export default async function verifyUserAction(
       errors: ["Unknown server error"],
     };
   }
-  await createSession({
-    _id: id,
-  });
   redirect("/");
 }
