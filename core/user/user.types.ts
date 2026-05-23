@@ -1,23 +1,23 @@
 export enum UserStatus {
-  ACTIVE = "ACTIVE",
-  INACTIVE = "INACTIVE",
-  DECEASED = "DECEASED",
+	ACTIVE = 'ACTIVE',
+	INACTIVE = 'INACTIVE',
+	DECEASED = 'DECEASED',
 }
 
 export interface IUser {
-  name: string;
-  email: string;
-  password: string;
-  username: string;
-  verified: boolean;
-  lifecycle: {
-    status: UserStatus;
-    lastActiveAt: Date;
-    declaredDeadAt?: Date;
-  };
+	name: string;
+	email: string;
+	password: string;
+	username: string;
+	verified: boolean;
+	lifecycle: {
+		status: UserStatus;
+		lastActiveAt: Date;
+		declaredDeadAt?: Date;
+	};
 }
 
 export interface UserMethods {
-  verifyPassword(password: string): Promise<boolean>;
-  setPassword(password: string): Promise<void>;
+	verifyPassword(password: string): Promise<boolean>;
+	setPassword(password: string): Promise<void>;
 }
